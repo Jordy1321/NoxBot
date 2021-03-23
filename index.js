@@ -4,6 +4,12 @@ const fs = require('fs');
 const client = new Discord.Client();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 client.commands = new Discord.Collection();
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/NoxBot', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
@@ -34,7 +40,7 @@ client.on('message', message => {
         }
         client.commands.get('help').execute(message, client);
     }
-    
+
     if (!message.content.startsWith(process.env.PREFIX)) return;
 
     const args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/);
