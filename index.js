@@ -5,8 +5,9 @@ const client = new Discord.Client();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 client.commands = new Discord.Collection();
 const mongoose = require('mongoose');
+const mongolink = process.env.MONGOPASS
 
-mongoose.connect('mongodb://localhost/NoxBot', {
+mongoose.connect(`${mongolink}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -23,27 +24,12 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
-    if (message.channel.type === "dm") return;
     if (message.author.bot) return;
-    if (message.mentions.has(client.user)) {
-        if (message.author.bot) {
-            return;
-        }
-        if (message.webhookID) {
-            return;
-        }
-        if (message.content.includes('@everyone')) {
-            return;
-        }
-        if (message.content.includes('@here')) {
-            return;
-        }
-        client.commands.get('help').execute(message, client);
-    }
-
     if (!message.content.startsWith(process.env.PREFIX)) return;
-
     const args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/);
+    if (message.content.startsWith("!ip")) return client.commands.get("ip").execute(message, args, client)
+    if (message.channel.type === "dm") return;
+
     const commandName = args.shift().toLowerCase();
 
     const command = client.commands.get(commandName)
@@ -57,4 +43,4 @@ client.on('message', message => {
     }
 });
 
-client.login(process.env.TOKEN);
+client.login(process.env.BOT_TOKEN);

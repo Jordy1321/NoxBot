@@ -4,6 +4,7 @@
   "description": "CodeNox's Bot",
   "main": "index.js",
   "dependencies": {
+    "crypto-js": "^4.0.0",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
