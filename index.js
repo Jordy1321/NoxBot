@@ -6,6 +6,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 client.commands = new Discord.Collection();
 const mongoose = require('mongoose');
 const mongolink = process.env.MONGOPASS
+const keepAlive = require('./server.js')
 
 mongoose.connect(`${mongolink}`, {
     useNewUrlParser: true,
@@ -43,4 +44,5 @@ client.on('message', message => {
     }
 });
 
+keepAlive()
 client.login(process.env.BOT_TOKEN);
